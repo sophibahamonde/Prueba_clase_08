@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aves Chilenas</title>
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+    <nav>
+        <h1>Aves Chilenas</h1>
+        <ul>
+            <li><a href="index.html">Portada</a></li>
+            <li><a href="page-1.html">Cantores</a></li>
+            <li><a href="page-2.html">Playeras</a></li>
+            <li><a href="page-3.html">Nadadoras</a></li>
+            <li><a href="page-4.html">Los cuatro dedos</a></li>
+            <li><a href="page-5.html" class="active">Cazadoras</a></li>
+            <li><a href="page-6.html">Cazadores nocturnos</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h2>Cazadoras</h2>
+        <p>Los Accipitriformes son un orden de aves rapaces diurnas, que incluye a las águilas, gavilanes, milanos, buitres del Viejo Mundo y otras especies cazadoras. Se distinguen por su vista aguda, garras fuertes (garras prensiles) y pico curvado, adaptados para cazar o alimentarse de carroña. Son animales poderosos que habitan en una gran variedad de ecosistemas, desde montañas hasta llanuras y bosques. Cumplen un rol ecológico importante como depredadores y carroñeros.</p>
+        <div class="grid" id="grid"></div>
+    </div>
+    <footer>
+        <p>Desarrollado por <a href="#" target="_blank">Nombre Apellido</a> &copy; 2025</p>
+    </footer>
+    <script>
+        const grid = document.getElementById('grid');
+
+        async function datos(raw) {
+            try {
+                let consulta = await fetch(raw);
+                let data = await consulta.json();
+                console.log(data);
+                let conteo = 1;
+                data.forEach((a) => {
+                    if(a.info.order.value.includes("Accipitriformes")){                    
+                    grid.innerHTML += `
+                        <div class="grid-item">
+                            <img src="${a.image.url.replace("http://www.buscaves.cl/", "https://buscaves.cl/")}" alt="${a.names.spanish}"/>
+                            <p>${conteo}. <em>${a.names.spanish}</em></p>
+                            <small>${a.names.latin}</small>
+                        </div>
+                    `;
+                    conteo++;
+                    };
+                });
+            } catch (error) {
+                console.error('Error al cargar los datos:', error);
+            }
+        }
+
+        datos("https://raw.githubusercontent.com/NinjasCL/chileanbirds-dataset/refs/heads/master/data/birds.json");
+    </script>
+</body>
+</html>

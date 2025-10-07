@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aves Chilenas</title>
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+    <nav>
+        <h1>Aves Chilenas</h1>
+        <ul>
+            <li><a href="index.html">Portada</a></li>
+            <li><a href="page-1.html">Cantores</a></li>
+            <li><a href="page-2.html">Playeras</a></li>
+            <li><a href="page-3.html" class="active">Nadadoras</a></li>
+            <li><a href="page-4.html">Los cuatro dedos</a></li>
+            <li><a href="page-5.html">Cazadoras</a></li>
+            <li><a href="page-6.html">Cazadores nocturnos</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h2>Nadadoras</h2>
+        <p>Son un orden de aves acuáticas que incluye patos, gansos y cisnes. Están adaptadas a la vida en el agua, con patas palmeadas, cuerpos flotantes y picos anchos, muchos con filtros para alimentarse. Son comunes en ríos, lagos, humedales y costas, y muchas especies son migratorias. Son conocidos por su comportamiento social, vuelo en formación y, en algunos casos, por su domesticación.</p>
+        <div class="grid" id="grid"></div>
+    </div>
+    <footer>
+        <p>Desarrollado por <a href="#" target="_blank">Nombre Apellido</a> &copy; 2025</p>
+    </footer>
+    <script>
+        const grid = document.getElementById('grid');
+
+        async function datos(raw) {
+            try {
+                let consulta = await fetch(raw);
+                let data = await consulta.json();
+                console.log(data);
+                let conteo = 1;
+                data.forEach((a) => {
+                    if(a.info.order.value.includes("Anseriformes")){                    
+                    grid.innerHTML += `
+                        <div class="grid-item">
+                            <img src="${a.image.url.replace("http://www.buscaves.cl/", "https://buscaves.cl/")}" alt="${a.names.spanish}"/>
+                            <p>${conteo}. <em>${a.names.spanish}</em></p>
+                            <small>${a.names.latin}</small>
+                        </div>
+                    `;
+                    conteo++;
+                   };
+                });
+            } catch (error) {
+                console.error('Error al cargar los datos:', error);
+            }
+        }
+
+        datos("https://raw.githubusercontent.com/NinjasCL/chileanbirds-dataset/refs/heads/master/data/birds.json");
+    </script>
+</body>
+</html>
